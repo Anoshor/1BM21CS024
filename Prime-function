@@ -1,0 +1,44 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int find_primecom(int n) {
+    
+    int i, flags=0;
+    
+    if(n==1) {
+        flags=2;
+    }
+    
+    else {
+        for(i=2;i<=n/2;i++) {
+        if(n%i==0) {
+            flags=1; break;
+            }
+        }
+    }
+    
+    return flags;
+}
+
+void main() {
+    int n,flag=0,flag2=0;
+    printf("\nEnter a positive integer: ");
+    scanf("%d",&n);
+    
+    flag=find_primecom(n);
+    
+    if(flag==0) {
+        printf("\nNumber is prime");
+        while(flag2!=1) {
+            n++;
+            flag2=find_primecom(n);
+        }
+        printf("\nThe next composite number is %d",n);
+    }
+    else if(flag==2) {
+        printf("\nNumber is neither prime nor composite");
+    }
+    else {
+        printf("\nNumber is Composite");
+    }
+}
