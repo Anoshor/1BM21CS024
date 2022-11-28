@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define size 100
+
+char stack[10];
+int top=-1;
+
+int isFull() {
+    //bool m;
+    if(top==size) {
+        //m=true;
+        return 5;
+    }
+    else {
+        //m=false;
+        return 6;
+    }
+}
+
+int isEmpty() {
+    //bool m;
+    if(top==-1) {
+        //m=true;
+        return 5;
+    }
+    else {
+        //m=false;
+        return 6;
+    }
+}
+
+void pop() {
+    if(isEmpty()==5) {
+        return;
+    }
+    else {
+        //return(stack[top]);
+        top--;
+    }
+}
+
+char peek() {
+    return stack[top];
+}
+
+void push(char x) {
+    if(isFull()==5) {
+        return;//printf("Stack Overflow\n");
+    }
+    else {
+        stack[++top]=x;
+    }
+}
+
+bool isValid(char * s){
+    int flag1=0,flag2=0,flag3=0,i=0;
+    char ch;
+    while((ch=s[i])!='\0') {
+        if(ch=='{') {
+            push(ch);
+            flag1++;
+        }
+        else if(ch=='(') {
+            push(ch);
+            flag2++;
+        }
+        else if(ch=='[') {
+            push(ch);
+            flag3++;
+        }
+        else if(ch=='}') {
+            if (peek()=='{')
+                flag1--;
+                pop;
+        }
+        else if(ch==')') {
+            if (peek()=='(')
+                flag2--;
+                pop;
+        }
+        else if(ch==']') {
+            if (peek()=='[')
+                flag3--;
+                pop;
+        }
+        i++;
+    }
+
+    if ((flag1==0)&&(flag2==0)&&(flag3==0)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
