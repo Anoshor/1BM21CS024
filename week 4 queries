@@ -1,0 +1,27 @@
+//1
+select customer_name as n from depositer d where d.accno = any (select b.accno from bank_account b where b.branch_name in (select branch_name from branch where branch_city in ('Delhi'))) group by (customer_name) having count(n)>(select count(branch_name) from branch where branch_city='Delhi');
+
+
+
+//2
+select customer_name from borrower where customer_name not in (select customer_name from depositer);
+
+
+//3
+select customer_name from borrower b where b.loan_number = any
+(select l.loan_number from loan l where l.branch_name = any
+(select branch_name from branch where branch_city = 'Bangalore'))
+and customer_name in (select customer_name from depositer);
+
+//4
+select branch_name, branch_city from branch where assets > 
+(select max(assets) from branch where branch_city ='Bangalore')
+and branch_city != ('Bangalore');
+
+//5
+delete from bank_account where branch_name in (select branch_name from branch where branch_city like ('Bom%'));
+
+
+//6
+update bank_account set balance =balance + (balance*0.05);
+select * from bank_account;
