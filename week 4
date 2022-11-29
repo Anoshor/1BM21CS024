@@ -1,0 +1,8 @@
+create table borrower (Customer_Name varchar(20), loan_number int, foreign key(Customer_Name) references BankCustomer(Customer_Name) on delete cascade, foreign key(loan_number) references loan(loan_number);
+
+insert into borrower values ('Avinash',1);
+insert into borrower values ('Dinesh',2);
+insert into borrower values ('Mohan',3);
+insert into borrower values ('Nikil',4);
+insert into borrower values ('Ravi',5);
+
