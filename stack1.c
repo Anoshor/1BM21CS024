@@ -1,88 +1,93 @@
-#include<stdbool.h>  
 #include <stdio.h>
 #include <stdlib.h>
-#define size 10
 
-int stack[size];
-int top=-1;
+struct node {
+    int data;
+    struct node *next;
+};
+struct node *head;
 
-
-
-
-int isFull() {
-    //bool m;
-    if(top==size) {
-        //m=true;
-        return 5;
-    }
-    else {
-        //m=false;
-        return 6;
-    }
+struct node* create_node() {
+    struct node *ptr;
+    ptr=(struct node *)malloc(sizeof(struct node *));
+    return ptr;
 }
 
-int isEmpty() {
-    //bool m;
-    if(top==-1) {
-        //m=true;
-        return 5;
+void beginsert() {
+    struct node *ptr=create_node();
+    int item;
+    
+    if(ptr==NULL) {
+        printf("\nOVERFLOW");
     }
     else {
-        //m=false;
-        return 6;
+        printf("\nEnter value: ");
+        scanf("%d",&item);
+        ptr->data=item;
+        ptr->next=head;
+        head=ptr;
+        printf("\nSuccessfully inserted Node");
     }
 }
-
-void push(int x) {
-    if(isFull==5) {
-        printf("Stack Overflow\n");
+void lastinsert() {
+    struct node *ptr,*temp;
+    int item;
+    ptr=(struct node *)malloc(sizeof(struct node));
+    if(ptr==NULL) {
+        printf("\nOVERFLOW");
     }
     else {
-        stack[++top]=x;
-    }
-}
-
-void pop() {
-    if(isEmpty==5) {
-        printf("Stack underflow\n");
-    }
-    else {
-        printf("%d\n",stack[top]);
-        top--;
+        printf("\nEnter value: ");
+        scanf("%d",&item);
+        ptr->data=item;
+        if(head==NULL) {
+            ptr->next=NULL;
+            head=ptr;
+            printf("\nNode Inserted");
+        }
+        else {
+            temp=head;
+            while((temp->next)!=NULL) {
+                temp=temp->next;
+            }
+            temp->next=ptr;
+            ptr->next=NULL;
+            printf("\nNode Inserted");
+        }
     }
 }
 
 void display() {
-    if(isEmpty==5) {
-        printf("\nStack is empty");
+    struct node *ptr;
+    ptr=head;
+    if(ptr==NULL) {
+        printf("\nEmpty Linked List");
     }
     else {
-        for(int i=top;i>=0;i--) {
-            printf("\n%d ",stack[i]);
+        printf("\nValues: ");
+        while(ptr!=NULL) {
+            printf(" %d ",ptr->data);
+            ptr=ptr->next;
         }
     }
 }
 
-int main() {
+void main() {
+    int choice;
     while(1) {
-        printf("\n 1. Push 2. Pop 3. Display Else: Exit\n");
-        int n;
-        scanf("%d",&n);
-        if(n==1) {
-            int x;
-            scanf("%d",&x);
-            push(x);
+        printf("\n1. INSERT 2. Display \n");
+        scanf("%d",&choice);
+        
+        if(choice==1) {
+            beginsert();
         }
-        else if(n==2) {
-            pop();
-        }
-        else if(n==3){
+        else if(choice==2) {
             display();
         }
         else {
             exit(0);
         }
+        
     }
 
-    return 0;
 }
