@@ -1,39 +1,100 @@
-import java.util.Scanner;
+import java.util.*;
+class bank
+{
+	public String name;
+	public int acc_no;
+	public float bal;
+	public float si;
 
-abstract class Figure {
-	int no_para;
-	abstract void calc_area();
-	abstract void calc_perimeter();
+	public void accept()
+	{
+		Scanner s=new Scanner(System.in);
+		System.out.print("\nEnter the name of the account holder: ");
+		name=s.next();
+		System.out.print("Enter the account number: ");
+		acc_no=s.nextInt();
+		System.out.print("Enter the account balance: ");
+		bal=s.nextFloat();
+	}
+
+	public void display()
+	{
+		System.out.println("*Details*");
+		System.out.println("Name: "+name+"\nAccount number: "+acc_no+"\nBalance: "+bal);
+	}
+
+	public void simple_interest()
+	{
+		System.out.println("\nRate of interest= 8%");
+		si=(bal*8)/100;
+		System.out.println("Simple interest(for one year)= Rs"+si);
+	}
+
 }
-class Rectangle extends Figure {
-	
-	
-	Rectangle() {
-		System.out.println("Figure is a Rectangle");
-		no_para=4;
-		Scanner ss=new Scanner(System.in);
-		int sides[]=new int[4];
-		System.out.println("Enter the 2 sides");
-		for(int i=0;i<2;i++) {
-			sides[i]=ss.nextInt();
-			sides[i+2]=sides[i];
+
+class savings extends bank
+{
+	public void cheque()
+	{
+		System.out.println("\nNo cheque services");
+	}
+
+	public void withdrawal()
+	{
+		float amount;
+		Scanner a=new Scanner(System.in);
+		System.out.println("\nNo minimun balance required");
+		System.out.print("Enter the amount to be withdrawm: ");
+		amount=a.nextFloat();
+		if(amount>super.bal)
+		{
+			System.out.println("Balance is insufficient");
+		}
+		else
+		{
+			super.bal=super.bal-amount;
+			System.out.println(amount+" withdrawm");
+			System.out.println("Available balance= "+super.bal);
 		}
 	}
-	void calc_area() {
-		int area=sides[0]*sides[1];
-		System.out.println("Area is "+area);
-	}
-	void calc_perimeter() {
-		int sum=0;
-		for(int i=0;i<4;i++) {
-			sum=sum+sides[i];
-		}
-	}
 }
 
-class fmain {
-	public static void main(String ss[]) {
-		Rectangle r1=new Rectangle();
-		r1.calc_area();
+class current extends bank
+{
+	public void cheque()
+	{
+		System.out.println("\nCheque services available");
+	}
+
+	public void withdrawal()
+	{
+		float amount;
+		Scanner a=new Scanner(System.in);
+		System.out.println("\nMinimun balance= Rs.1000.00");
+		if(super.bal<1000)
+    {
+      System.out.println("Balance is insufficient to withdraw");
+      float service_charge;
+      service_charge=(1*super.bal)/100;
+      super.bal=super.bal-service_charge;
+      System.out.println("Service charge of Rs"+service_charge+" is added");
+      System.out.println("Available balance= Rs"+super.bal);
+    }
+		else
+		{
+			System.out.print("Enter the amount to be withdrawm: ");
+			amount=a.nextFloat();
+			if(amount>(super.bal-1000))
+			{
+				System.out.println("Balance is insufficient");
+			}
+			else
+			{
+				super.bal=super.bal-amount;
+				System.out.println(amount+" withdrawm");
+				System.out.println("Available balance= "+super.bal);
+			}
+		}
+		
 	}
 }
