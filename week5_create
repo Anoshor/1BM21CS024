@@ -1,6 +1,6 @@
 create table dept(deptno int, dname varchar(20), dloc varchar(30), primary key (deptno));
-create table employee (empno int, ename varchar(30), mgr_no int, hiredate date, sal float, deptnum int, primary key (empno), foreign key (deptnum) references dept (deptnum) on delete cascade on update cascade);
-create table project (                                                                                                        pno int, ploc varchar(30), pname varchar(30), primary key (pno));
+create table employee (empno int, ename varchar(30), mgr_no int, hiredate date, sal float, deptnum int, primary key (empno), foreign key (deptnum) references dept (deptno) on delete cascade on update cascade);
+create table project (pno int, ploc varchar(30), pname varchar(30), primary key (pno));
 create table incentives (empno int,incentive_date date, incentive_amount float, primary key (incentive_date) foreign key (empno) references employee (empno) on delete cascade on update cascade);
 create table assigned_to (empno int, pno int, job_role varchar(20), foreign key (empno) references employee (empno) on delete cascade on update cascade, foreign key (pno) references project (pno) on delete cascade on update cascade);
 
