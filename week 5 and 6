@@ -79,9 +79,11 @@ select ename from employee where empno in (select a.mgr_no from employee a, quer
 
 // query 6:
 
-select b.ename from employee b where b.empno=(select a.empno from incentives a where a.empno not in (select i.empno from incentives i having max(i.incentive_amount)) having max(incentive_amount));
+select b.ename from employee b where (b.empno=(select a.empno from incentives a where a.empno not in (select i.empno from incentives i where i.incentive_date like '2019-01%' having max(i.incentive_amount))and a.incentive_date like '2019-01%')) having max(incentive_amount);
 
 // query 7:
+
+select a.empno,a.ename from employee a, employee b where a.mgr_no=b.empno and a.deptnum=b.deptnum;
 
 
 
