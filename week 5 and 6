@@ -57,3 +57,32 @@ INNER JOIN assigned_to a
 ON a.empno=e.empno
 INNER JOIN project p
 ON p.pno=a.pno WHERE p.ploc=d.dloc;
+
+
+//// week 6
+
+// query 3:
+create view query3 as select a.mgr_no, count(a.empno) as counted from Employee a, Employee b where a.mgr_no=b.empno group by a.mgr_no order by count(a.empno) desc;
+
+select e.ename from Employee e where e.empno=(SELECT mgr_no FROM query3 where counted=(select max(counted) from query3));
+
+
+// query 4:
+
+create view query4 as select e.mgr_no as mgrno, avg(e.sal) as avgg from employee e group by(e.mgr_no);
+select a.empno, a.ename from employee a, query4 b where (a.empno=b.mgrno) and (a.sal>b.avgg);
+
+// query 5:
+
+create view query5 as select distinct a.empno as mgrno1 from employee a,employee b where a.empno=b.mgr_no;
+select ename from employee where empno in (select a.mgr_no from employee a, query5 q where a.empno=q.mgrno1);
+
+// query 6:
+
+select b.ename from employee b where b.empno=(select a.empno from incentives a where a.empno not in (select i.empno from incentives i having max(i.incentive_amount)) having max(incentive_amount));
+
+// query 7:
+
+
+
+
