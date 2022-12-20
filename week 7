@@ -47,3 +47,30 @@ insert into catalog values
 (10002, 20002, 20),
 (10003, 20003, 30),
 (10004, 20003, 40);
+
+
+///// Query 1 ////
+
+select distinct pname from parts p, catalog c where p.pid=c.pid and c.sid in (select distinct sid from suppliers);
+
+//// Query 2 ////
+
+select c.sid from catalog c group by c.sid having count(c.sid)=(select count(pid) from parts);
+
+//// Query 3 ////
+
+select sname from suppliers where sid in (select distinct c.sid from catalog c where c.pid in (select p.pid from parts p where color="red"));
+
+//// Query 4 ////
+
+select pname from parts where pid in (select pid from catalog where sid=(select sid from suppliers where sname="Acme Widget") and pid not in (select distinct pid from catalog where sid!=(select sid from suppliers where sname="Acme Widget")));
+
+//// Query 5 ////
+
+create view avgcost as select pid,avg(cost) as averagec from catalog group by pid;
+select sid from catalog c, avgcost a where c.pid = a.pid and c.cost>(a.averagec);
+
+//// Quert 6 ////
+create view maxcost as select pid,max(cost) as maxc from catalog group by pid;
+create view query6 as select c.sid,c.pid from catalog c, maxcost a where c.pid = a.pid and c.cost=(a.maxc) order by c.pid;
+select sname,q.pid from suppliers s, query6 q where s.sid=q.sid;
