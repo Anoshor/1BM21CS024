@@ -220,8 +220,25 @@ int count(struct node **head) {
 //                 swap(&arr[j], &arr[j + 1]);
 // }
 
+struct node *concat (struct node **head1,struct node **head2) {
+    struct node *ptr;
+    if(*head1==NULL) {
+        *head1=*head2;
+        return *head1;
+    }
+    if(*head2==NULL) {
+        return *head1;
+    }
+    ptr=*head1;
+    while(ptr->next!=NULL) {
+        ptr=ptr->next;
+    }
+    ptr->next=*head2;
+    return *head1;
+}
 void main() {
     struct node *head=NULL;
+    struct node *head2=NULL;
     while(1) {
         printf("\n1.Insert Beg  2.Insert Mid  3.Insert End  4.Display 5.Delete Beg 6.Delete End 7.Delete Specific 8.Search 9. Reverse 10. Sort\n");
         int c;
@@ -265,8 +282,33 @@ void main() {
         }
         
         else {
-            exit(0);
+            break;
         }
         
     }
+    while(1) {
+        printf("\n1.Insert Beg  2.Insert Mid  3.Insert End  4.Exit\n");
+        int c;
+        scanf("%d",&c);
+        
+        if(c==1) {
+            insert_beg(&head2);
+        }
+        else if(c==2) {
+            printf("where do u want to add a node?: ");
+            int pos;
+            scanf("%d",&pos);
+            insert_mid(&head2,pos);
+        }
+        else if(c==3) {
+            insert_end(&head2);
+        }
+        else {
+            break;
+        }
+    }
+    
+    head=concat(&head,&head2);
+    display(head);
+    
 }
