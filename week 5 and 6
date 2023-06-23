@@ -1,0 +1,90 @@
+create table dept(deptno int, dname varchar(20), dloc varchar(30), primary key (deptno));
+create table employee (empno int, ename varchar(30), mgr_no int, hiredate date, sal float, deptnum int, primary key (empno), foreign key (deptnum) references dept (deptno) on delete cascade on update cascade);
+create table project (pno int, ploc varchar(30), pname varchar(30), primary key (pno));
+create table incentives (empno int,incentive_date date, incentive_amount float, primary key (incentive_date) foreign key (empno) references employee (empno) on delete cascade on update cascade);
+create table assigned_to (empno int, pno int, job_role varchar(20), foreign key (empno) references employee (empno) on delete cascade on update cascade, foreign key (pno) references project (pno) on delete cascade on update cascade);
+
+
+//inserting values random
+insert into dept values (1,'Design & Marketting','Delhi');
+insert into dept values (2,'Data Science','Bengaluru');
+insert into dept values (3,'Data Science','Hyderabad');
+insert into dept values (4,'Finance Management','Delhi');
+insert into dept values (5,'AI','Mysuru');
+insert into dept values (7,'AI','Bengaluru');
+
+insert into employee values (2,'Anoshor',10,'2017-02-12',20000,2);
+insert into employee values (1,'John',10,'2012-03-01',80000,3);
+insert into employee values (6,'Ravi',21,'2019-07-19',5000,1);
+insert into employee values (12,'Daniel',15,'2016-04-05',25000,4);
+insert into employee values (15,'Alexia',8,'2020-09-30',10000,5);
+insert into employee values (11,'Eren',30,'2022-09-01',2000,7);
+
+insert into project values (200,'Bengaluru','Electric Vehicles');
+insert into project values (150,'Hyderabad','Epay System');
+insert into project values (156,'Hyderabad','Ecofriendly Battery');
+insert into project values (221,'Bengaluru','Debugger System');
+insert into project values (323,'Mysuru','MakeTravelEasy');
+insert into project values (45,'Delhi','CityCleaner');
+
+insert into incentives values (2,'2022-03-03',5000);
+insert into incentives values (1,'2020-12-25',7500);
+insert into incentives values (6,'2022-09-06',2500);
+insert into incentives values (15,'2022-11-25',2000);
+insert into incentives values (12,'2022-12-01',3670);
+
+insert into assigned_to values (2,221,'Software Enginner');
+insert into assigned_to values (1,156,'Software Enginner');
+insert into assigned_to values (12,45,'Web Developer');
+insert into assigned_to values (15,150,'Data Scientist');
+insert into assigned_to values (2,200,'Software Enginner');
+insert into assigned_to values (6,323,'BackEnd Dev');
+
+//Query 1:
+select distinct empno from assigned_to where pno in (select pno from project where ploc in ('Bengaluru','Hyderabad','Mysuru'));
+
+
+//Query 2:
+incentives-get : select empno from incentives
+select empno from employees where empno not in (incentives-get);
+
+//Query 3:
+SELECT e.ename,e.empno,d.dname,a.job_role,d.dloc,p.ploc 
+FROM employee e
+INNER JOIN  dept d
+ON d.deptno=e.deptnum
+INNER JOIN assigned_to a
+ON a.empno=e.empno
+INNER JOIN project p
+ON p.pno=a.pno WHERE p.ploc=d.dloc;
+
+
+//// week 6
+
+// query 3:
+create view query3 as select a.mgr_no, count(a.empno) as counted from Employee a, Employee b where a.mgr_no=b.empno group by a.mgr_no order by count(a.empno) desc;
+
+select e.ename from Employee e where e.empno=(SELECT mgr_no FROM query3 where counted=(select max(counted) from query3));
+
+
+// query 4:
+
+create view query4 as select e.mgr_no as mgrno, avg(e.sal) as avgg from employee e group by(e.mgr_no);
+select a.empno, a.ename from employee a, query4 b where (a.empno=b.mgrno) and (a.sal>b.avgg);
+
+// query 5:
+
+create view query5 as select distinct a.empno as mgrno1 from employee a,employee b where a.empno=b.mgr_no;
+select ename from employee where empno in (select a.mgr_no from employee a, query5 q where a.empno=q.mgrno1);
+
+// query 6:
+
+select b.ename from employee b where (b.empno=(select a.empno from incentives a where a.empno not in (select i.empno from incentives i where i.incentive_date like '2019-01%' having max(i.incentive_amount))and a.incentive_date like '2019-01%')) having max(incentive_amount);
+
+// query 7:
+
+select a.empno,a.ename from employee a, employee b where a.mgr_no=b.empno and a.deptnum=b.deptnum;
+
+
+
+

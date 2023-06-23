@@ -1,0 +1,65 @@
+create database flight;
+use flight;
+create table flights (flno int, ffrom varchar(20),
+fto varchar(20), distance int, departs time, arrives time, price int, primary key (flno));
+create table aircraft (aid int, aname varchar(10), cruising_range int, primary key (aid));
+create table certified (eid int, aid int, foreign key (eid) references employees(eid) on delete cascade on update cascade, 
+foreign key (aid) references aircraft(aid) on delete cascade);
+create table employees (eid int, ename varchar(30), salary int, primary key (eid));
+
+insert into employees values (101,'Avinash',50000);
+insert into employees values (102,'Lokesh',60000);
+insert into employees values (103,'Rakesh',70000);
+insert into employees values (104,'Santhosh',82000);
+insert into employees values (105,'Tilak',5000);
+
+insert into aircraft values (1, 'Airbus',2000);
+insert into aircraft values (2, 'Boeing',700);
+insert into aircraft values (3, 'JetAirways',550);
+insert into aircraft values (4, 'Indigo',5000);
+insert into aircraft values (5, 'Boeing',4500);
+insert into aircraft values (6, 'Airbus',2200);
+
+insert into certified values (101,2);
+insert into certified values (101,4);
+insert into certified values (101,5);
+insert into certified values (101,6);
+insert into certified values (102,1);
+insert into certified values (102,3);
+insert into certified values (102,5);
+insert into certified values (103,2);
+insert into certified values (103,3);
+insert into certified values (103,5);
+insert into certified values (103,6);
+insert into certified values (104,6);
+insert into certified values (104,1);
+insert into certified values (104,3);
+insert into certified values (105,3);
+
+insert into flights values (1,'Bengaluru','New Delhi',500,'6:00','9:00',5000);
+insert into flights values (2,'Bengaluru','Chennai',300,'7:00','8:30',5000);
+insert into flights values (3,'Trivandrum','New Delhi',800,'8:00','11:30',5000);
+insert into flights values (4,'Bengaluru','Frankfurt',10000,'6:00','23:30',5000);
+insert into flights values (5,'Kolkata','New Delhi',2400,'11:00','3:30',5000);
+insert into flights values (6,'Bengaluru','Frankfurt',8000,'9:00','23:00',5000);
+
+
+/// query 1
+select aname from aircraft where aid in 
+(select aid from certified c, employees e where e.eid=c.eid and e.salary>=80000);
+
+/// query 2
+
+select c.eid,c.aid,max(a.cruising_range) from certified c left outer join aircraft a on c.aid=a.aid where c.eid in (select eid from certified group by eid having count(aid)>=3) group by c.eid;
+
+/// query 3
+select ename from employees where salary<=(select min(price) from flights where ffrom='Bengaluru' and fto='Frankfurt');
+
+/// query 4
+select a.aid,a.aname,c.eid,avg(e.salary) from aircraft a right outer join certified c on a.aid=c.aid right outer join employees e on c.eid=e.eid where a.aid in (select aid from aircraft where cruising_range>=1000) group by a.aid;
+
+/// query 5
+select distinct c.eid,e.ename from certified c, employees e where c.eid=e.eid and c.aid in (select aid from aircraft where aname='Boeing');
+
+/// query 6
+select aid from aircraft where cruising_range>=(select distance from flights where ffrom='Bengaluru' and fto='New Delhi');

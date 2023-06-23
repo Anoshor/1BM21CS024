@@ -1,0 +1,59 @@
+create database bank;
+
+create table Branch (branch_name varchar(20),branch_city varchar(20),assets float,primary key (branch_name));
+create table Bank_Account (accno int,branch_name varchar(20),balance float,primary key (accno),foreign key(branch_name) references Branch(branch_name) on delete cascade);
+create table Bank_Customer (customer_name varchar(20),customer_street varchar(20),city varchar(20),primary key(customer_name));
+create table Depositer (customer_name varchar(20),Accno int,foreign key(Customer_Name) references Bank_Customer(customer_name) on delete cascade,foreign key(accno) references bank_account(accno) on delete cascade);
+create table Loan (loan_number int, branch_name varchar(20),amount float,primary key (loan_number),foreign key(branch_name) references Branch(branch_name) on delete cascade);
+
+insert into Branch values ('SBI_Chamrajpet','Bangalore',50000);
+insert into Branch values ('SBI_ResidencyRoad','Bangalore',10000);
+insert into Branch values ('SBI_ShivajiRoad','Bombay',20000);
+insert into Branch values ('SBI_ParlimentRoad','Delhi',10000);
+insert into Branch values ('SBI_Jantarmantar','Delhi',20000);
+
+
+insert into Bank_Customer values ('Avinash','Bull_Temple_Road','Bangalore');
+insert into Bank_Customer values ('Dinesh','Bannergatta_Road','Bangalore');
+insert into Bank_Customer values ('Mohan','NationalCollege_Road','Bangalore');
+insert into Bank_Customer values ('Nikil','Akbar_Road','Delhi');
+insert into Bank_Customer values ('Ravi','Prithviraj_Road','Delhi');
+
+insert into Loan values (1,'SBI_Chamrajpet',1000);
+insert into Loan values (2,'SBI_ResidencyRoad',2000);
+insert into Loan values (3,'SBI_ShivajiRoad',3000);
+insert into Loan values (4,'SBI_ParlimentRoad',4000);
+insert into Loan values (5,'SBI_Jantarmantar',5000);
+
+
+insert into Bank_Account values (1,'SBI_Chamrajpet',2000);
+insert into Bank_Account values (2,'SBI_ResidencyRoad',5000);
+insert into Bank_Account values (3,'SBI_ShivajiRoad',6000);
+insert into Bank_Account values (4,'SBI_ParlimentRoad',9000);
+insert into Bank_Account values (5,'SBI_Jantarmantar',8000);
+insert into Bank_Account values (6,'SBI_ShivajiRoad',4000);
+insert into Bank_Account values (8,'SBI_ResidencyRoad',4000);
+insert into Bank_Account values (9,'SBI_ParlimentRoad',3000);
+insert into Bank_Account values (10,'SBI_ResidencyRoad',5000);
+insert into Bank_Account values (11,'SBI_Jantarmantar',2000);
+
+insert into Depositer values ('Avinash',1);
+insert into Depositer values ('Dinesh',2);
+insert into Depositer values ('Nikil',4);
+insert into Depositer values ('Ravi',5);
+insert into Depositer values ('Avinash',8);
+insert into Depositer values ('Nikil',9);
+insert into Depositer values ('Dinesh',10);
+insert into Depositer values ('Nikil',11);
+
+create table borrower (customer_name varchar(20), loan_number int, foreign key(Customer_Name) references Bank_Customer(customer_name) on delete cascade, foreign key(loan_number) references Loan(loan_number) on delete cascade);
+
+insert into borrower values ('Avinash',1);
+insert into borrower values ('Dinesh',2);
+insert into borrower values ('Mohan',3);
+insert into borrower values ('Nikil',4);
+insert into borrower values ('Ravi',5);
+
+insert into branch values ('SBI_MantriMarg', 'Delhi', 200000);
+insert into bank_account values (12, 'SBI_MantriMarg', 2000);
+insert into depositer values ('Nikil', 12);
