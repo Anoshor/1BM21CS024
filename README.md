@@ -1,2 +1,0 @@
-# 1BM21CS024
-BMSCE Labs
